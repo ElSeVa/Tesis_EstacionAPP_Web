@@ -13,19 +13,25 @@ $lat = $_POST["lat"];
 $garages = Garage::traerTodo();
 
 if($_POST["sendForm"] == null ){
-    header("location:index.php?accion=error0");
+    header("location:pageIndex?accion=error0");
 }
 
 if($nombre && $contrasena && $email && $tipoVehiculo){
     //$contrasena = Util::Hash($contrasena);
-    $arrayConductor = new Conductor($nombre,$contrasena,$email,$tipoVehiculo,$propietario);
-    //$array = Util::completarArrayConductor($nombre,$contrasena,$email,$tipoVehiculo,$propietario);
-    if(!isset($_POST["propietario"]) && $_POST["propietario"] == ""){
-        $conductor = Conductor::insertarConductor($arrayConductor->toArray());
-        header("location: index.php?seccion=home&accion=exitosoConductor");
+    $existeConductor = Conductor::traerPorEmail($email);
+    if(!$existeConductor){
+        $arrayConductor = new Conductor($nombre,$contrasena,$email,$tipoVehiculo,$propietario);
+        //$array = Util::completarArrayConductor($nombre,$contrasena,$email,$tipoVehiculo,$propietario);
+        if(!isset($_POST["propietario"]) && $_POST["propietario"] == ""){
+            $conductor = Conductor::insertarConductor($arrayConductor->toArray());
+            header("location: pageIndex?seccion=home&accion=exitosoConductor");
+        }
+    }else{
+        header("location: pageIndex?seccion=register&accion=errorExisteConductor");
     }
+
 }else{
-    header("location: index.php?seccion=register&accion=errorCompletar");
+    header("location: pageIndex?seccion=register&accion=errorCompletar");
 }
 
 
@@ -33,7 +39,7 @@ if(isset($_POST["propietario"]) && $_POST["propietario"] == "1"){
     if($nombreGarage && $direccion && $disponibilidad){
         foreach($garages as $garage){
             if($garage->getDireccion() == $direccion){
-                header("location: index.php?seccion=register&accion=errorDireccionOcupado");
+                header("location: pageIndex?seccion=register&accion=errorDireccionOcupado");
                 die;
             }
         }
@@ -44,9 +50,9 @@ if(isset($_POST["propietario"]) && $_POST["propietario"] == "1"){
         $maps = new Mapa($lat,$lng,$garage);
         //$maps = Util::completarArrayMapa($lat,$lng,$garage);
         $maps = Mapa::agregarCoords($maps->toArray());
-        header("location: index.php?seccion=home&accion=exitosoGarage");
+        header("location: pageIndex?seccion=home&accion=exitosoGarage");
     }else{
-        header("location: index.php?seccion=register&accion=errorCompletarGarage");
+        header("location: pageIndex?seccion=register&accion=errorCompletarGarage");
     }
 }
 

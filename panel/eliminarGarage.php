@@ -1,12 +1,12 @@
 <?php session_start();
 $mapa = Mapa::traerPorIDGarage($idGarage);
-$boolean = Mapa::eliminarMapa($mapa->getID());
+$boolean = Mapa::eliminarMapa($mapa->getId());
 $estadias = Estadia::traerTodoPorIdGarage($idGarage);
 foreach($estadias as $estadia){
-    $boolean = Estadia::eliminarEstadia($estadia->getID());
+    $boolean = Estadia::eliminarEstadia($estadia->getId());
 }
 $valor = Garage::eliminarGarage($idGarage);
-$id = Conductor::actualizarConductor(array("ID" => $id, "Propietario" => 0));
+$id = Conductor::actualizarConductor(array("id" => $id, "Propietario" => 0));
 session_destroy();
-header("location:index.php?accion=exitosaEliminacion");
+header("location:index?accion=exitosaEliminacion");
 ?>

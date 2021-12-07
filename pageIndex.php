@@ -1,4 +1,8 @@
 <?php
+if(isset($_SESSION["IDC"]) || isset($_SESSION["IDP"])){
+    header("Location: mapa?seccion=mapa");
+    die;
+}
 if (isset($_COOKIE['COOKIE_INDEFINED_SESSION'])) {
 	if ($_COOKIE['COOKIE_INDEFINED_SESSION']) {
         include_once("config.php");
@@ -9,17 +13,17 @@ if (isset($_COOKIE['COOKIE_INDEFINED_SESSION'])) {
         $conductor = Conductor::traerPorEmail($email);
         if($conductor->getEmail() == $email){
             if($conductor->getPropietario() == 1){
-                header("Location: panel/panel.php?seccion=garage"); //envias al usuario a home.php si se lo encontro en la BD!
+                header("Location: panel/panel?seccion=garage"); //envias al usuario a home.php si se lo encontro en la BD!
             }else{
-                header("Location: mapa.php?seccion=mapa"); //envias al usuario a home.php si se lo encontro en la BD!
-            }        
+                header("Location: mapa?seccion=mapa"); //envias al usuario a home.php si se lo encontro en la BD!
+            }
         }
 		//AQUI HACES LA QUERY PARA BUSCAR EN TU BD UN USUARIO Y SU PASSWORD CON LAS VARIABLES ANTERIORES
 	}
 }
 
 if(!isset($_GET["seccion"])){
-    header("Location: index.php?seccion=home");
+    header("Location: pageIndex?seccion=home");
 }
 
 $active = null;
@@ -35,6 +39,7 @@ $active = null;
         <link href="css/style.css" rel="stylesheet" type="text/css">
         <!-- Load Bootstrap CSS-->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
         <!-- Load Leaflet from CDN -->
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
         integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
@@ -42,7 +47,8 @@ $active = null;
         <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
         integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
         crossorigin=""></script>
-
+        <script src="https://www.gstatic.com/firebasejs/ui/6.0.0/firebase-ui-auth.js"></script>
+        <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/6.0.0/firebase-ui-auth.css" />
         <!-- Load Esri Leaflet from CDN -->
         <script src="https://unpkg.com/esri-leaflet@2.5.1/dist/esri-leaflet.js"
         integrity="sha512-q7X96AASUF0hol5Ih7AeZpRF6smJS55lcvy+GLWzJfZN+31/BQ8cgNx2FGF+IQSA4z2jHwB20vml+drmooqzzQ=="
@@ -56,23 +62,39 @@ $active = null;
         integrity="sha512-HrFUyCEtIpxZloTgEKKMq4RFYhxjJkCiF5sDxuAokklOeZ68U2NPfh4MFtyIVWlsKtVbK5GD2/JzFyAfvT5ejA=="
         crossorigin=""></script>
         <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <!-- SDK FIREBASE -->
+        <!-- The core Firebase JS SDK is always required and must be listed first -->
+        <!--<script type="module" src="https://www.gstatic.com/firebasejs/9.5.0/firebase-app.js"></script>-->
+
+        <!-- TODO: Add SDKs for Firebase products that you want to use
+        https://firebase.google.com/docs/web/setup#available-libraries -->
+
+        <!---<script type="module" src="https://www.gstatic.com/firebasejs/9.5.0/firebase-auth.js"></script>
+        <script type="module" src="https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js"></script>-->
+        <script defer src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+
+        <script defer src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+        <script defer src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+        <script defer src="js/firebase-google-singin.js"></script>
+        <!--<script type="module"  src=""></script>-->
 
         <title>EstacionAPP</title>
     </head>
     <header >
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark" aria-label="Eighth navbar example">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark" aria-label="Eighth navbar">
             <div class="container">
-                <a class="navbar-brand" href="index.php">EstacionAPP</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample07" aria-controls="navbarsExample07" aria-expanded="false" aria-label="Toggle navigation">
+                <a class="navbar-brand" href="pageIndex">EstacionAPP</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsToogler" aria-controls="navbarsToogler" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="collapse navbar-collapse" id="navbarsExample07">
+                <div class="collapse navbar-collapse" id="navbarsToogler">
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link <?= $active = ($_GET["seccion"] == "home") ? "active": "" ?>" aria-current="page" href="index.php?seccion=home">Home</a>
+                            <a class="nav-link <?= $active = ($_GET["seccion"] == "home") ? "active": "" ?>" aria-current="page" href="pageIndex?seccion=home">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link <?= $active = ($_GET["seccion"] == "login") ? "active": "" ?>" href="index.php?seccion=login">Login/Register</a>
+                            <a class="nav-link <?= $active = ($_GET["seccion"] == "login") ? "active": "" ?>" href="pageIndex?seccion=login">Login/Register</a>
                         </li>
                     </ul>
                 </div>
@@ -95,8 +117,16 @@ $active = null;
                 include_once("seccion/404.php");
             } else if ($accion == "errorDireccionOcupado"){
                 include_once("seccion/404.php");
-            } else {}
-        }
+            } else if($accion == "emailEnviado"){
+                include_once("seccion/404.php");
+            } else if($accion == "contrasenaActualizada"){
+                include_once("seccion/404.php");
+            } else if($accion == "mismaContrasena"){
+                include_once("seccion/404.php");
+            } else if($accion == "noHacking"){
+                include_once("seccion/404.php");
+            }
+        }        
 
         if(!empty($_GET["seccion"])){
             $seccion = $_GET["seccion"];            
@@ -104,6 +134,8 @@ $active = null;
                 include_once("seccion/pageLogin.php");
             } else if ($seccion == "register"){
                 include_once("seccion/pageRegister.php");
+            } else if ($seccion == "recuperar"){
+                include_once("seccion/pageRecuperar.php");
             } else if($seccion == "home"){
                 include_once("seccion/home.php");
             } else {
@@ -117,10 +149,11 @@ $active = null;
         ?>
         
 
+        <!-- <script src="js/cerrarSesion.js"></script> -->
         <script src="js/maps.js"></script>
         <script type="text/javascript" src="js/javascript.js"></script>
-        <!-- Load Bootstrap JS -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+        <script type="text/javascript" src="js/verificarPassword.js"></script>
+        <!-- Load Bootstrap JS -->        
     </body>
     <footer>
         <p class="mt-5 mb-3 text-muted">© Derechos de autor - Sebastian Gonzalez 2017–2021</p>

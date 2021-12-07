@@ -1,7 +1,6 @@
 <?php
     
     if(!empty($_GET["seccion"])){
-      
       $seccion = $_GET["seccion"];
       switch ($seccion) {
         case 'login':
@@ -13,17 +12,6 @@
             $alerta = "Error pagina";
             $mensaje = "No exite la pagina";
           break;
-      }
-      if($seccion == "login"){
-          
-      } else if ($seccion == "register"){
-          
-      } else if($seccion == "home"){
-          
-      } else {
-          $modo = "alert-danger";
-          $alerta = "Error pagina";
-          $mensaje = "No exite la pagina";
       }
     }
 
@@ -37,6 +25,16 @@
           break;
         case 'exitosoGarage':
             $alerta = "Existoso registro del garage";
+            $mensaje = "";
+            $modo = "alert-success";
+          break;
+        case 'emailEnviado':
+            $alerta = "Se envio a su correo el link correspondiente";
+            $mensaje = "";
+            $modo = "alert-success";
+          break;
+        case 'contrasenaActualizada':
+            $alerta = "Su contraseña fue actualizada";
             $mensaje = "";
             $modo = "alert-success";
           break;
@@ -55,13 +53,21 @@
             $mensaje = "La direccion ingresada ya esta ocupada";
             $modo = "alert-danger";
           break;
+        case 'mismaContrasena':
+            $alerta = "Esta usando la misma contrasena";
+            $mensaje = "Se recomienda cambiarla";
+            $modo = "alert-warning";
+          break;
+        case 'noHacking':
+            $alerta = "No puedes hacer eso";
+            $mensaje = "";
+            $modo = "alert-danger";
         default:
           # code...
           break;
       }
 
     }
-
 
 ?>
 

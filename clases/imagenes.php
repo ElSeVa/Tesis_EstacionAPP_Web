@@ -2,23 +2,23 @@
 
 class Imagenes{
 
-    private $ID;
+    private $id;
     private $tipo;
     private $imagen;
-    private $ID_Garage;
+    private $id_garage;
 
-    function __construct($tipo, $imagen, $ID_Garage) {
+    function __construct($tipo, $imagen, $id_garage) {
         $this->tipo = $tipo;
         $this->imagen = $imagen;
-        $this->ID_Garage = $ID_Garage;
+        $this->id_garage = $id_garage;
     }
 
-    public function setID($id){
-        $this->ID = $id;
+    public function setId($id){
+        $this->id = $id;
     }
 
-    public function getID() {
-        return $this->ID;
+    public function getId() {
+        return $this->id;
     }
 
     public function getTipo(){
@@ -29,23 +29,23 @@ class Imagenes{
         return $this->imagen;
     }
 
-    public function getID_Garage(){
-        return $this->ID_Garage;
+    public function getId_Garage(){
+        return $this->id_garage;
     }
 
     public function toArray() {
         return [
-            'ID' => $this->ID,
+            'id' => $this->id,
             'tipo' => $this->tipo,
             'imagen' => $this->imagen,
-            'ID_Garage' => $this->ID_Garage
+            'id_garage' => $this->id_garage
         ];
     }
 
     public static function fromArray($array) {
-        $img = new Imagenes($array["tipo"],$array["imagen"],$array["ID_Garage"]);
+        $img = new Imagenes($array["tipo"],$array["imagen"],$array["id_garage"]);
         
-        $img->ID = $array['ID'];
+        $img->id = $array['id'];
         
         return $img;
     }
@@ -60,8 +60,8 @@ class Imagenes{
         return $id;
     }
     
-    public static function eliminarImagen($ID){
-        $boolean = MYSQL::delete('imagenes', $ID);
+    public static function eliminarImagen($id){
+        $boolean = MYSQL::delete('imagenes', $id);
         return $boolean;
     }
 
@@ -76,8 +76,8 @@ class Imagenes{
         return $array;
     }
 
-    public static function traerTodoID_Garage($ID) {
-        $registros = MYSQL::selectALLWhere('imagenes', 'ID_Garage', $ID);
+    public static function traerTodoID_Garage($id) {
+        $registros = MYSQL::selectALLWhere('imagenes', 'id_garage', $id);
 
         $array = array();
         foreach($registros as $registro) {
@@ -87,8 +87,8 @@ class Imagenes{
         return $array;
     }
 
-    public static function traerPorId($ID) {
-        $array = MYSQL::select('imagenes', 'ID', $ID);
+    public static function traerPorId($id) {
+        $array = MYSQL::select('imagenes', 'id', $id);
         if($array) {
             return Imagenes::fromArray($array);
         }
@@ -96,8 +96,8 @@ class Imagenes{
         return null;
     }
 
-    public static function traerPorId_Garage($ID) {
-        $array = MYSQL::select('imagenes', 'ID_Garage', $ID);
+    public static function traerPorId_Garage($id) {
+        $array = MYSQL::select('imagenes', 'id_garage', $id);
         if($array) {
             return Imagenes::fromArray($array);
         }

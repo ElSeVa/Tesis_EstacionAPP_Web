@@ -16,3 +16,16 @@ $(document).ready(function(){
         }
      });
 });
+
+$(document).ready(function(){
+    $("#switch").on( "change", function() {
+        if(this.checked){            
+            window.location.replace("panel?seccion=promociones");
+        }
+     });
+    $("#switch1").on( "change", function() {
+        if(!this.checked){
+            window.location.replace("panel?seccion=promos");
+        }
+     });
+});

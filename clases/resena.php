@@ -2,21 +2,21 @@
 
 class Resena{
 
-    private $ID;
+    private $id;
     private $usuario;
     private $texto;
     private $valoracion;
-    private $ID_Garage;
+    private $id_garage;
     
-    function __construct($usuario,$texto,$valoracion,$ID_Garage) {
+    function __construct($usuario,$texto,$valoracion,$id_garage) {
         $this->usuario = $usuario;
         $this->texto = $texto;
         $this->valoracion = $valoracion;
-        $this->ID_Garage = $ID_Garage;        
+        $this->id_garage = $id_garage;        
     }
 
-    public function getID() {
-        return $this->ID;
+    public function getId() {
+        return $this->id;
     }
 
     public function getUsuario(){
@@ -31,24 +31,24 @@ class Resena{
         return $this->valoracion;
     }
     
-    public function getID_Garage(){
-        return $this->ID_Garage;
+    public function getId_Garage(){
+        return $this->id_garage;
     }
 
     public function toArray() {
         return [
-            'ID' => $this->ID,
-            'Usuario' => $this->usuario,
-            'Texto' => $this->texto,
-            'Valoracion' => $this->valoracion,
-            'ID_Garage' => $this->ID_Garage
+            'id' => $this->id,
+            'usuario' => $this->usuario,
+            'texto' => $this->texto,
+            'valoracion' => $this->valoracion,
+            'id_garage' => $this->id_garage
         ];
     }
 
     public static function fromArray($array) {
-        $resena = new Resena($array["Usuario"],$array["Texto"],$array['Valoracion'], $array['ID_Garage']);
+        $resena = new Resena($array["usuario"],$array["texto"],$array['valoracion'], $array['id_garage']);
         
-        $resena->ID = $array['ID'];
+        $resena->id = $array['id'];
         
         return $resena;
     }
@@ -64,7 +64,7 @@ class Resena{
     }
 
     public static function traerPorId($id) {
-        $array = MYSQL::select('resena', 'ID', $id);
+        $array = MYSQL::select('resena', 'id', $id);
         if($array) {
             return Resena::fromArray($array);
         }
@@ -83,8 +83,8 @@ class Resena{
         return $array;
     }
 
-    public static function traerTodoOrderBYID($ID, $traerID, $order) {
-        $registros = MYSQL::selectALLOrderBYWhere('resena', $traerID, $ID, $order);
+    public static function traerTodoOrderBYID($id, $traerId, $order) {
+        $registros = MYSQL::selectALLOrderBYWhere('resena', $traerId, $id, $order);
 
         $array = array();
         foreach($registros as $registro) {
@@ -97,7 +97,7 @@ class Resena{
     public static function calcularValoracion($idGarage){
         $registros = MYSQL::selectALL('resena');
         foreach($registros as $registro) {
-            if($registro['ID_Garage'] == $idGarage){
+            if($registro['id_garage'] == $idGarage){
                 $array[] = Resena::fromArray($registro);
             }
         }

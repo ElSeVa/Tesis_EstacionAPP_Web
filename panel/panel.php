@@ -1,13 +1,13 @@
 <?php session_start();
 include_once("../config.php");
 if(!$_SESSION["IDP"]){
-    header("location:../index.php?accion=errorPagina");
+    header("location:../pageIndex?accion=errorPagina");
 }
 $idc = $_SESSION["IDC"];
 $idp = $_SESSION["IDP"];
 $conductor = Conductor::traerPorId($idc);
 $garage = Garage::traerPorId($idp);
-$idGarage = $garage->getID();
+$idGarage = $garage->getId();
 $nombre = $conductor->getEmail();
 
 ?>
@@ -17,6 +17,7 @@ $nombre = $conductor->getEmail();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../css/style.css" rel="stylesheet" type="text/css">
     <!-- Load Bootstrap CSS-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
     <!-- Load Leaflet from CDN -->
@@ -30,28 +31,31 @@ $nombre = $conductor->getEmail();
     <title>Document</title>
 </head>
 <body class="text-center">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" aria-label="Eighth navbar example">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" aria-label="Eighth navbar">
         <div class="container">
-            <a class="navbar-brand" href="panel.php">Panel EstacionAPP</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample07" aria-controls="navbarsExample07" aria-expanded="false" aria-label="Toggle navigation">
+            <a class="navbar-brand" href="panel">Panel EstacionAPP</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsToogler" aria-controls="navbarsToogler" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarsExample07">
+            <div class="collapse navbar-collapse" id="navbarsToogler">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link <?= $active = ($_GET["seccion"] == "garage") ? "active": "" ?>" aria-current="page" href="panel.php?seccion=garage">Garage</a>
+                        <a class="nav-link <?= $active = ($_GET["seccion"] == "garage") ? "active": "" ?>" aria-current="page" href="panel?seccion=garage">Garage</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <?= $active = ($_GET["seccion"] == "modificar") ? "active": "" ?>" aria-current="page" href="panel.php?seccion=modificar">Estadia</a>
+                        <a class="nav-link <?= $active = ($_GET["seccion"] == "promos" || $_GET["seccion"] == "promociones" ) ? "active": "" ?>" aria-current="page" href="panel?seccion=promos">Promociones</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <?= $active = ($_GET["seccion"] == "reservaciones") ? "active": "" ?>" aria-current="page" href="panel.php?seccion=reservaciones&pagina=1">Reservaciones</a>
+                        <a class="nav-link <?= $active = ($_GET["seccion"] == "modificar") ? "active": "" ?>" aria-current="page" href="panel?seccion=modificar">Estadia</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <?= $active = ($_GET["seccion"] == "mapa") ? "active": "" ?>" aria-current="page" href="../mapa.php?seccion=mapa">Mapa</a>
+                        <a class="nav-link <?= $active = ($_GET["seccion"] == "reservaciones") ? "active": "" ?>" aria-current="page" href="panel?seccion=reservaciones&pagina=1">Reservaciones</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="../logout.php">Logout</a>
+                        <a class="nav-link <?= $active = ($_GET["seccion"] == "mapa") ? "active": "" ?>" aria-current="page" href="../mapa?seccion=mapa">Mapa</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../logout">Logout</a>
                     </li>
                 </ul>
             </div>
@@ -68,6 +72,10 @@ if(isset($_GET["seccion"])){
         include_once("seccion/garages.php");
     }elseif($seccion == "reservaciones"){
         include_once("seccion/reservaciones.php");
+    }elseif($seccion == "promos"){
+        include_once("seccion/promos.php");
+    }elseif($seccion == "promociones"){
+        include_once("seccion/promociones.php");
     }
 }
 
@@ -89,6 +97,8 @@ if(isset($_GET["seccion"])){
     <script src="https://cdnjs.cloudflare.com/ajax/libs/push.js/0.0.11/push.min.js"></script>
     <script src="../js/multiplesFotos.js"></script>
     <script src="../js/maps.js"></script>
+    <script src="../js/javascript.js"></script>
+    <!-- <script src="../js/cerrarSession.js"></script> -->
     <!-- Load Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
 </body>

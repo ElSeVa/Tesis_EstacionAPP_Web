@@ -19,7 +19,7 @@ if($nombre && $direccion && $disponibilidad){
             die;
         }
     }
-    $id = Conductor::actualizarConductor(array("ID" => $id, "Propietario" => 1));
+    $id = Conductor::actualizarConductor(array("id" => $id, "Propietario" => 1));
     $array = Util::completarArrayGarage($nombre,$direccion,$disponibilidad,$telefono,$id);
     $garage = Garage::insertarGarage($array);
     $maps = Util::completarArrayMapa($lat,$lng,$garage);

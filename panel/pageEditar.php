@@ -26,18 +26,18 @@
 <div class="m-3 d-flex flex-wrap justify-content-evenly align-items-start">
 <?php
     foreach($imagenes as $img){
-        if($img->getID_Garage() == $idGarage){
+        if($img->getId_Garage() == $idGarage){
             ?>
 
-    <div class="card" style="width: 18rem;">
+    <div class="card">
         <div class="d-flex">
             <p class="ms-3">Eliminar foto</p>
             <form class="ms-auto" action="eliminarImagen.php" method="post">
-                <input type="hidden" name="id" value="<?= $img->getID() ?>">
+                <input type="hidden" name="id" value="<?= $img->getId() ?>">
                 <button type="submit" name="submitEliminar" class="btn-close" aria-label="Close"></button>
             </form>
         </div>
-        <img src="data:image/jpeg;base64,<?= $img->getImagen() ?>" class="card-img-bottom" alt="...">
+        <img id="imagenes" src="data:image/jpeg;base64,<?= $img->getImagen() ?>" class="card-img-bottom" alt="...">
     </div>
 
             <?php

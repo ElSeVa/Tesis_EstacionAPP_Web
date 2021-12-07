@@ -6,7 +6,7 @@ if($_POST["sendForm"] == null){
     $telefono = $_POST["telefono"];
     $lng = $_POST["lng"];
     $lat = $_POST["lat"];
-    $array = array("ID" => $idGarage, "Nombre" => $nombre, "Direccion" => $direccion, "Telefono" => $telefono);
+    $array = array("id" => $idGarage, "Nombre" => $nombre, "Direccion" => $direccion, "Telefono" => $telefono);
     if($nombre && $direccion){
         $garage = Garage::actualizarGarage($array);
         $maps = Util::completarArrayMapa($lat,$lng,$garage);

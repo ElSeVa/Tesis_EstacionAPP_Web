@@ -2,85 +2,85 @@
 
 class Reservacion{
     
-    private $ID;
-    private $Precio;
-    private $Estadia;
-    private $Cantidad;
-    private $Fecha_inicio;
-    private $Fecha_final;
-    private $Estado;
-    private $ID_Garage;
-    private $ID_Conductor;
+    private $id;
+    private $precio;
+    private $estadia;
+    private $cantidad;
+    private $fecha_inicio;
+    private $fecha_final;
+    private $estado;
+    private $id_garage;
+    private $id_conductor;
     
-    function __construct($Precio, $Estadia, $Cantidad, $Fecha_inicio, $Fecha_final, $Estado, $ID_Conductor, $ID_Garage) {
-        $this->Precio = $Precio;
-        $this->Estadia = $Estadia;
-        $this->Cantidad = $Cantidad;
-        $this->Fecha_inicio = $Fecha_inicio;
-        $this->Fecha_final = $Fecha_final;
-        $this->Estado = $Estado;
-        $this->ID_Conductor = $ID_Conductor;
-        $this->ID_Garage = $ID_Garage;
+    function __construct($precio, $estadia, $cantidad, $fecha_inicio, $fecha_final, $estado, $id_conductor, $id_garage) {
+        $this->precio = $precio;
+        $this->estadia = $estadia;
+        $this->cantidad = $cantidad;
+        $this->fecha_inicio = $fecha_inicio;
+        $this->fecha_final = $fecha_final;
+        $this->estado = $estado;
+        $this->id_conductor = $id_conductor;
+        $this->id_garage = $id_garage;
     }
 
-    function getID(){
-        return $this->ID;
+    function getId(){
+        return $this->id;
     }
 
     function getPrecio(){
-        return $this->Precio;
+        return $this->precio;
     }
 
     function getEstadia(){
-        return $this->Estadia;
+        return $this->estadia;
     }
 
     function getCantidad(){
-        return $this->Cantidad;
+        return $this->cantidad;
     }
 
     function getFecha_inicio(){
-        return $this->Fecha_inicio;
+        return $this->fecha_inicio;
     }
 
     function getFecha_final(){
-        return $this->Fecha_final;
+        return $this->fecha_final;
     }
 
     function getEstado(){
-        return $this->Estado;
+        return $this->estado;
     }
 
-    function getID_Conductor(){
-        return $this->ID_Conductor;
+    function getId_Conductor(){
+        return $this->id_conductor;
     }
 
-    function getID_Garage(){
-        return $this->ID_Garage;
+    function getId_Garage(){
+        return $this->id_garage;
     }
 
     public static function fromArray($array){
-        $reservacion = New Reservacion($array['Precio'], $array['Estadia'], $array['Cantidad'], $array['Fecha_inicio'], $array['Fecha_final'], $array['Estado'], $array['ID_Conductor'], $array['ID_Garage']);
-        $reservacion->ID = $array['ID'];
+        $reservacion = New Reservacion($array['precio'], $array['estadia'], $array['cantidad'], $array['fecha_inicio'], $array['fecha_final'], $array['estado'], $array['id_conductor'], $array['id_garage']);
+        $reservacion->id = $array['id'];
         return $reservacion;
     }
 
-    public static function traerTodoPorID($ID){
+    public static function traerTodoPorID($id){
         $registros = MYSQL::selectALL('reservacion');
         $array = array();
         foreach($registros as $registro) {
-            if($registro['ID_Garage'] == $ID && $registro['Estado'] == "Esperando"){
+            if($registro['id_garage'] == $id && $registro['estado'] == "Esperando"){
                 $array[] = Reservacion::fromArray($registro);
             }
         }
         return $array;
     }
 
-    public static function traerPorLimit($ID, $limit_inicio, $limit_final){
+    public static function traerPorLimit($id, $limit_inicio, $limit_final){
         $registros = MYSQL::selectLimitAll('reservacion', $limit_inicio, $limit_final);
         $array = array();
         foreach($registros as $registro) {
-            if($registro['Estado'] == "Esperando" && $registro['ID_Garage'] == $ID){
+            if($registro['estado'] == "Esperando" && $registro['id_garage'] == $id){
                 $array[] = Reservacion::fromArray($registro);
             }
         }
@@ -92,8 +92,8 @@ class Reservacion{
         return $id;
     }
 
-    public static function eliminarReserva($ID){
-        $boolean = MYSQL::delete('reservacion', $ID);
+    public static function eliminarReserva($id){
+        $boolean = MYSQL::delete('reservacion', $id);
         return $boolean;
     }
 
@@ -107,8 +107,8 @@ class Reservacion{
         return $array;
     }
 
-    public static function traerPorId($ID) {
-        $array = MYSQL::select('reservacion', 'ID', $ID);
+    public static function traerPorId($id) {
+        $array = MYSQL::select('reservacion', 'id', $id);
         if($array) {
             return Reservacion::fromArray($array);
         }
@@ -116,8 +116,8 @@ class Reservacion{
         return null;
     }
 
-    public static function traerPorIDC($ID) {
-        $array = MYSQL::select('reservacion', 'ID_Conductor', $ID);
+    public static function traerPorIDC($id) {
+        $array = MYSQL::select('reservacion', 'id_conductor', $id);
         if($array) {
             return Reservacion::fromArray($array);
         }

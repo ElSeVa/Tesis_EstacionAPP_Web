@@ -4,6 +4,6 @@ $id = $_GET["id"];
 
 $valor = Estadia::eliminarEstadia($id);
 
-header("location:panel.php?seccion=modificar&accion=$valor");
+header("location:panel?seccion=modificar&accion=$valor");
 
 ?>

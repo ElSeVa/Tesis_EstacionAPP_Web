@@ -1,20 +1,18 @@
 <?php session_start();
     include_once("config.php");
     if(!$_GET){
-        header("location:mapa.php?seccion=mapa");
+        header("location:mapa?seccion=mapa");
     }
     if(!$_SESSION["IDC"]){
-        header("location:index.php?accion=errorPagina");
+        header("location:pageIndex?accion=errorPagina");
     }
     $id = $_SESSION["IDC"];
     $conductor = Conductor::traerPorId($id);
+    $promociones = Promociones::traerPorIdconductor($id);
     $nombre = $conductor->getEmail();
     $garages = Garage::traerTodo();
     $mapas = Mapa::traerTodo();
-    if(isset($_SESSION["IDP"])){
-        $reservaciones = Reservacion::traerTodoPorID($_SESSION["IDP"]);
-    }
-    $estadiasVehiculos = Estadia::traerTodoGroupBy('VehiculoPermitido');
+    $estadiasVehiculos = Estadia::traerTodoGroupBy('vehiculo_permitido');
     if( isset($_POST['submit']) ){
         $filtroVehiculo = $_POST["filtroVehiculo"];
         $filtroHorario = $_POST["filtroHorario"];
@@ -45,61 +43,6 @@
         crossorigin="">
 
     <link rel="stylesheet" href="js/leaflet-search-master/src/leaflet-search.css" />
-
-
-    <title>Bienvenido</title>
-</head>
-<body class="text-center">
-
-    <header>
-
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark" aria-label="Eighth navbar example">
-            <div class="container">
-                <span class="navbar-toggler-icon mx-2" onclick="openNav()"></span>
-                <a class="navbar-brand" href="mapa.php">EstacionAPP</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample07" aria-controls="navbarsExample07" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarsExample07">
-                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                    <?php
-                        if(isset($_SESSION["IDP"])){
-                    ?>
-                        <li class="nav-item">
-                            <a class="nav-link <?= $active = ($_GET["seccion"] == "garage") ? "active": "" ?>" aria-current="page" href="panel/panel.php?seccion=garage">Garage</a>
-                        </li>
-                    <?php
-                        }
-                    ?>
-                        <li class="nav-item">
-                            <a class="nav-link <?= $active = ($_GET["seccion"] == "mapa") ? "active": "" ?>" aria-current="page" href="mapa.php?seccion=mapa">Mapa</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="logout.php">Logout</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-
-    <div class="container">
-        <div id="main">
-            <?php
-                if(isset($_GET["seccion"])){
-                    $seccion = $_GET["seccion"];
-                    if($seccion == "mapa"){
-                        require_once("seccion/pageMapa.php");
-                    }else if($seccion == "crearGarage"){
-                        require_once("crearGarage.php");
-                    }else if ($seccion == "comentarios"){
-                        require_once("seccion/pageComentarios.php");
-                    }
-                }
-            ?>
-            <?php require_once("info.php"); ?>
-        </div>
-    </div>
     <!-- Load Leaflet from CDN -->
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
         integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
@@ -123,130 +66,204 @@
     <script src="js/sideNav.js" type="text/javascript"></script>
     <!-- Load Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
-    <?php
-        if(isset($_GET["seccion"])){
-            $seccion = $_GET["seccion"];
-            if($seccion == "mapa"){
-    ?>
+    <title>Bienvenido</title>
+</head>
+<body class="text-center">
+
+    <header>
+
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark" aria-label="Eighth navbar">
+            <div class="container">
+                <span class="mx-2" onclick="openNav()"><img src="../img/filter-icon.png" alt="Logotipo de filtro"></span>
+                <a class="navbar-brand" href="mapa.php">EstacionAPP</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsToogler" aria-controls="navbarsToogler" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarsToogler">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <?php
+                        if(isset($_SESSION["IDP"])){
+                    ?>
+                        <li class="nav-item">
+                            <a class="nav-link <?= $active = ($_GET["seccion"] == "garage") ? "active": "" ?>" aria-current="page" href="panel/panel?seccion=garage">Garage</a>
+                        </li>
+                    <?php
+                        }
+                    ?>
+                        <li class="nav-item">
+                            <a class="nav-link <?= $active = ($_GET["seccion"] == "mapa") ? "active": "" ?>" aria-current="page" href="mapa?seccion=mapa">Mapa</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="logout">Logout</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div id="main">
+            <?php
+                if(isset($_GET["seccion"])){
+                    $seccion = $_GET["seccion"];
+                    if($seccion == "mapa"){
+                        require_once("seccion/pageMapa.php");
+                    }else if($seccion == "crearGarage"){
+                        require_once("crearGarage.php");
+                    }else if ($seccion == "comentarios"){
+                        require_once("seccion/pageComentarios.php");
+                    }
+                }
+            ?>
+            <?php require_once("info.php"); ?>
+        </div>
+    </div>    
+<?php
+    if(isset($_GET["seccion"])){
+        $seccion = $_GET["seccion"];
+        if($seccion == "mapa"){
+?>
     <!-- Load AgregarElementos JS-->
     <script src="js/agregarElementos.js"></script>
     <!-- Load gps JS -->
     <script src="js/gps.js"></script>
     
     <script type="text/javascript">
-        map.zoomControl.setPosition('topright');
-
-        var searchControl = L.esri.Geocoding.geosearch({placeholder:'Ingrese direccion, barrio',title:'Buscador',expanded:false}).addTo(map);
-        
-        var results = L.layerGroup().addTo(map);
-
-        searchControl.on('results', function (data) {
-        results.clearLayers();
-            for (var i = data.results.length - 1; i >= 0; i--) {
-                results.addLayer(L.marker(data.results[i].latlng));
+map.zoomControl.setPosition('topright');
+var searchControl = L.esri.Geocoding.geosearch({placeholder:'Ingrese direccion, barrio',title:'Buscador',expanded:false}).addTo(map);
+var results = L.layerGroup().addTo(map);
+searchControl.on('results', function (data) {results.clearLayers();
+for (var i = data.results.length - 1; i >= 0; i--) {results.addLayer(L.marker(data.results[i].latlng));}});
+<?php
+    foreach($mapas as $mapa){
+        $lat = $mapa->getLatitud();
+        $lng = $mapa->getLongitud();
+        $garage = Garage::traerPorId($mapa->getId_Garage());
+        $estadias = Estadia::traerTodoPorFiltro($garage->getId());
+        foreach($estadias as $estadia){
+            if($estadia->getId_Garage() == $garage->getId()){
+                $vehiculos[] = $estadia->getVehiculoPermitido();
             }
-        });
-        <?php
-        foreach($mapas as $mapa){
-            $lat = $mapa->getLatitud();
-            $lng = $mapa->getLongitud();
-            $garage = Garage::traerPorId($mapa->getID_Garage());
-            $estadias = Estadia::traerTodoPorFiltro($garage->getID());
-            
-                foreach($estadias as $estadia){
-                    if($estadia->getID_Garage() == $garage->getID()){
-                        $vehiculos[] = $estadia->getVehiculoPermitido();
-                    }
-                    if(isset($filtroVehiculo) && $estadia->getVehiculoPermitido() == $filtroVehiculo->getVehiculoPermitido()){
-                
-                        if($garage->getDisponibilidad() != "Cerrado"){
-        ?>
-        var pop = L.marker(['<?= $lat ?>','<?= $lng ?>'],{icon: greenIcon}).addTo(map);
-        pop.bindPopup('<b><?= $garage->getNombre() ?></b><br><?= $garage->getDireccion()?><br>Vehiculos: <?= $estadia->getVehiculoPermitido() ?>');
-        var popup = pop.getPopup();
-        pop.on('popupopen',function(e){
-                if(popup.isOpen){
-                    console.log("abierto");
-                    var info_extra = document.getElementById("info-extra-<?=$garage->getID()?>");
-                    if(!info_extra){
-                        console.log("verifico el pop abierto");
-                        if(verificar(popup, <?=$garage->getID()?>)){
-                            buscarYllenar("strong_nombre","<?= $garage->getNombre() ?>");
-                            buscarYllenar("direccion-disponibildad-span","<?= $garage->getDireccion()?>, <?= $garage->getDisponibilidad() ?>");
-                            buscarYllenar("vehiculos-span","<?= implode(", ",$vehiculos) ?>");
-                            crearElemento("vehiculo-strong",'strong','Vehiculos permitidos:',"vehiculo-span");
-                            crearLink("button-form",'a','Ver Comentarios',"info-extra-<?=$garage->getID()?>","<?=$garage->getID()?>");
-                            buscarYllenar("telefono-span","<?= $garage->getTelefono() != null ? $garage->getTelefono() : " " ?>");
-                            buscarYllenar("precio-horario","Precio por <?= $estadia->getHorario() ?>: $");
-                            buscarYllenar("precio-span","<?= $estadia->getPrecio()?>");
-                        }
+            if(isset($filtroVehiculo) && $estadia->getVehiculoPermitido() == $filtroVehiculo->getVehiculoPermitido()){
+                switch($garage->getDisponibilidad()){
+                    case "Abierto":
+                        $tipo = "greenIcon";
+                        break;
+                    case "Cerrado":
+                        $tipo = "redIcon";
+                        break;
+                    case "Completo":
+                        $tipo = "yellowIcon";
+                        break;
+                }
+                foreach($promociones as $promocion){
+                    if($promocion->getId_Conductor() == $id && $promocion->getId_Garage() == $garage->getId()){
+                        $tipo = "orangeIcon";
                     }
                 }
-            });
-        pop.on('popupclose',function(e){
-                if(popup.isOpen){
-                    console.log("cerrado");
-                    var info_extra = document.getElementById("info-extra-<?=$garage->getID()?>");
-                    if(info_extra){
-                        eliminarElemento("info-extra-<?=$garage->getID()?>");
-                    }
-                }
-            });
-        <?php           
-                    }
-                }
+?>
+var pop = L.marker(['<?= $lat ?>','<?= $lng ?>'],{icon: <?= $tipo ?>}).addTo(map);
+pop.bindPopup('<b><?= $garage->getNombre() ?></b><br><?= $garage->getDireccion()?><br>Vehiculos: <?= $estadia->getVehiculoPermitido() ?>');
+var popup = pop.getPopup();
+pop.on('popupopen',function(e){
+    if(popup.isOpen){
+        console.log("abierto");
+        var info_extra = document.getElementById("info-extra-<?=$garage->getId()?>");
+        if(!info_extra){
+            console.log("verifico el pop abierto");
+            if(verificar(popup, <?=$garage->getId()?>)){
+                buscarYllenar("strong_nombre","<?= $garage->getNombre() ?>");
+                buscarYllenar("direccion-disponibildad-span","<?= $garage->getDireccion()?>, <?= $garage->getDisponibilidad() ?>");
+                buscarYllenar("vehiculos-span","<?= implode(", ",$vehiculos) ?>");
+                crearElemento("vehiculo-strong",'strong','Vehiculos permitidos:',"vehiculo-span");
+                crearLink("button-form",'a','Ver Comentarios',"info-extra-<?=$garage->getId()?>","<?=$garage->getId()?>");
+                buscarYllenar("telefono-span","<?= $garage->getTelefono() != null ? $garage->getTelefono() : " " ?>");
+                buscarYllenar("precio-horario","Precio por <?= $estadia->getHorario() ?>: $");
+                buscarYllenar("precio-span","<?= $estadia->getPrecio()?>");
             }
-                if(!isset($filtroVehiculo) && $garage->getDisponibilidad() != "Cerrado" && isset($vehiculos)){
-        ?>
-    var pop = new L.marker(['<?= $lat ?>','<?= $lng ?>'],{icon: greenIcon}).addTo(map);
-            pop.bindPopup('<b><?= $garage->getNombre() ?></b><br><?= $garage->getDireccion()?><br>Vehiculos: <?= implode(", ",$vehiculos) ?>');
-            var popup = pop.getPopup();
-            pop.on('popupopen',function(e){
-                if(popup.isOpen){
-                    console.log("abierto");
-                    if(verificar(popup, <?=$garage->getID()?>)){
-                        console.log("verifico el pop abierto");
-                        var info_extra = document.getElementById("info-extra-<?=$garage->getID()?>");
-                        if(info_extra){
-                            buscarYllenar("strong_nombre","<?= $garage->getNombre() ?>");
-                            buscarYllenar("direccion-disponibildad-span","<?= $garage->getDireccion()?>, <?= $garage->getDisponibilidad() ?>");
-                            buscarYllenar("vehiculos-span","<?= implode(", ",$vehiculos) ?>");
-                            crearElemento("vehiculo-strong",'strong','Vehiculos permitidos:',"vehiculo-span");
-                            crearLink("button-form",'a','Ver Comentarios',"info-extra-<?=$garage->getID()?>","<?=$garage->getID()?>");
-                            buscarYllenar("telefono-span","<?= $garage->getTelefono() != null ? $garage->getTelefono() : " " ?>");
-                            buscarYllenar("precio-horario","Precio por <?= $estadia->getHorario() ?>: $");
-                            buscarYllenar("precio-span","<?= $estadia->getPrecio()?>");
-                        }
-                    }
-                }
-            });            
-            pop.on('popupclose',function(e){
-                if(popup.isOpen){
-                    console.log("cerrado");
-                    var info_extra = document.getElementById("info-extra-<?=$garage->getID()?>");
-                    if(info_extra){
-                        eliminarElemento("info-extra-<?=$garage->getID()?>");
-                    }
-                }
-            });
-            
-        <?php       
-                }
-            unset($vehiculos);            
         }
+    }
+});
+pop.on('popupclose',function(e){
+    if(popup.isOpen){
+        console.log("cerrado");
+        var info_extra = document.getElementById("info-extra-<?=$garage->getId()?>");
+        if(info_extra){
+            eliminarElemento("info-extra-<?=$garage->getId()?>");
+        }
+    }
+});
+<?php
+            }
+        }
+            
+        if(!isset($filtroVehiculo) && isset($vehiculos)){
+            switch($garage->getDisponibilidad()){
+                case "Abierto":
+                    $tipo = "greenIcon";
+                    break;
+                case "Cerrado":
+                    $tipo = "redIcon";
+                    break;
+                case "Completo":
+                    $tipo = "yellowIcon";
+                    break;
+            }
+            foreach($promociones as $promocion){
+                if($promocion->getId_Conductor() == $id && $promocion->getId_Garage() == $garage->getId()){
+                    $tipo = "orangeIcon";
+                }
+            }
         ?>
-
+var pop = new L.marker(['<?= $lat ?>','<?= $lng ?>'],{icon: <?= $tipo ?>}).addTo(map);
+pop.bindPopup('<b><?= $garage->getNombre() ?></b><br><?= $garage->getDireccion()?><br>Vehiculos: <?= implode(", ",$vehiculos) ?>');
+var popup = pop.getPopup();
+pop.on('popupopen',function(e){
+    if(popup.isOpen){
+        console.log("abierto");
+        if(verificar(popup, <?=$garage->getId()?>)){
+            console.log("verifico el pop abierto");
+            var info_extra = document.getElementById("info-extra-<?=$garage->getId()?>");
+            if(info_extra){
+                buscarYllenar("strong_nombre","<?= $garage->getNombre() ?>");
+                buscarYllenar("direccion-disponibildad-span","<?= $garage->getDireccion()?>, <?= $garage->getDisponibilidad() ?>");
+                buscarYllenar("vehiculos-span","<?= implode(", ",$vehiculos) ?>");
+                crearElemento("vehiculo-strong",'strong','Vehiculos permitidos:',"vehiculo-span");
+                crearLink("button-form",'a','Ver Comentarios',"info-extra-<?=$garage->getId()?>","<?=$garage->getId()?>");
+                buscarYllenar("telefono-span","<?= $garage->getTelefono() != null ? $garage->getTelefono() : " " ?>");
+                buscarYllenar("precio-horario","Precio por <?= $estadia->getHorario() ?>: $");
+                buscarYllenar("precio-span","<?= $estadia->getPrecio()?>");
+            }
+        }
+    }
+});            
+pop.on('popupclose',function(e){
+    if(popup.isOpen){
+        console.log("cerrado");
+        var info_extra = document.getElementById("info-extra-<?=$garage->getId()?>");
+        if(info_extra){
+            eliminarElemento("info-extra-<?=$garage->getId()?>");
+        }
+    }
+});
+            
+<?php       
+        }
+        unset($vehiculos);            
+    }
+    ?>
     </script>
-        <?php
-            }
+    <?php
         }
+    }
     ?>
 </body>
 <footer class="mt-3">
         <p class="mt-3 mb-3 text-muted">© Derechos de autor - Sebastian Gonzalez 2017–2021</p>
         <th>
             <tr>
-                Tienes una propiedad? <a href="mapa.php?seccion=crearGarage">haz click aqui</a>
+                Tienes una propiedad? <a href="mapa?seccion=crearGarage">haz click aqui</a>
             </tr>
         </th>
 </footer>

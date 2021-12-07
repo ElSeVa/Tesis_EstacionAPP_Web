@@ -3,19 +3,19 @@ if(isset($_GET["id"])){
     $id = $_GET["id"];
     $garage = Garage::traerPorId($id);
     if($garage){
-        $idGarage = $garage->getID();
+        $idGarage = $garage->getId();
         $nombre = $garage->getNombre();
         $direccion = $garage->getDireccion();
         $disponibilidad = $garage->getDisponibilidad();
         $telefono = $garage->getTelefono();
         $imagenes = Imagenes::traerTodoID_Garage($idGarage);
 
-        $resenas = Resena::traerTodoOrderBYID($idGarage,'ID_Garage', 'DESC');
+        $resenas = Resena::traerTodoOrderBYID($idGarage,'id_garage', 'DESC');
     }else{
-        header("location:mapa.php?seccion=mapa&accion=noExiste");
+        header("location:mapa?seccion=mapa&accion=noExiste");
     }
 }else{
-    header("location:mapa.php?seccion=mapa&accion=errorID");
+    header("location:mapa?seccion=mapa&accion=errorID");
 }
 ?>
 
@@ -101,14 +101,15 @@ if(isset($_GET["id"])){
     <div class="border border-3 shadow-sm">
     <?php
     foreach($resenas as $resena){
+        if($resena != null){
             $hash = md5($resena->getTexto());
             $usuario = Conductor::traerPorId($resena->getUsuario());
             $valoracion = $resena->getValoracion();
-
+            if($usuario !=null){
     ?>
     <div class="border shadow rounded-3 m-3 p-2">
         <h5><?= $usuario->getNombre() ?></h5>
-        <p><?= $resena->getTexto() ?></p>
+        <p><?= Util::limpiar($resena->getTexto()) ?></p>
         <p class="text-end user-select-none h4 comentario">    
     <?php
                 $c = 6;
@@ -122,9 +123,10 @@ if(isset($_GET["id"])){
     ?>
         </p>
     </div>
-    <?php
-
+    <?php 
+            }
         }
+    }
     ?>
     </div>
 </div>

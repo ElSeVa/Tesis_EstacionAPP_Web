@@ -36,7 +36,7 @@ class MYSQL{
     public static function selectLimitAll($tabla, $limit_begin, $limit_end) {
         $mysqli = self::abrirDB();
 
-        $consulta = $mysqli->query("SELECT * FROM $tabla ORDER BY ID DESC LIMIT $limit_begin, $limit_end");
+        $consulta = $mysqli->query("SELECT * FROM $tabla ORDER BY id DESC LIMIT $limit_begin, $limit_end");
         if (!$consulta) {
             echo "Falló la consulta MySQL: " . $mysqli->error;
             exit;
@@ -52,7 +52,7 @@ class MYSQL{
 
     public static function selectFilter($tabla, $horario, $vehiculo, $precio) {
         $mysqli = self::abrirDB();
-        $consulta = $mysqli->query("SELECT * FROM $tabla WHERE Horario = '$horario' AND VehiculoPermitido = '$vehiculo' ORDER BY Precio $precio");
+        $consulta = $mysqli->query("SELECT * FROM $tabla WHERE horario = '$horario' AND vehiculo_permitido = '$vehiculo' ORDER BY precio $precio");
         if (!$consulta) {
             echo "Falló la consulta MySQL: " . $mysqli->error;
             exit;
@@ -119,7 +119,7 @@ class MYSQL{
 
     public static function selectALLOrderBYWhere($tabla, $condicion, $valor, $order) {
         $mysqli = self::abrirDB();
-        $consulta = $mysqli->query("SELECT * FROM $tabla WHERE $condicion = '" .$valor. "' ORDER BY ID $order ");
+        $consulta = $mysqli->query("SELECT * FROM $tabla WHERE $condicion = '" .$valor. "' ORDER BY id $order ");
         if (!$consulta) {
             echo "Falló la consulta MySQL: " . $mysqli->error;
             exit;
@@ -132,6 +132,24 @@ class MYSQL{
 
         return $resultado;
     }
+
+    public static function selectALLFrecuent($tabla, $condicion, $valor) {
+        $mysqli = self::abrirDB();
+        $consulta = $mysqli->query("SELECT c.id, c.nombre, c.tipo_vehiculo, COUNT(*) as frecuencia FROM $tabla as r INNER JOIN conductor as c ON r.id_conductor = c.id WHERE $condicion = $valor GROUP BY r.id_garage, r.id_conductor ORDER BY frecuencia DESC");
+        if (!$consulta) {
+            echo "Falló la consulta MySQL: " . $mysqli->error;
+            exit;
+        }
+
+        $resultado = array();
+        while ($fila = $consulta->fetch_assoc()) {
+            $resultado[] = $fila;
+        }
+
+        return $resultado;
+    }
+
+
     
     public static function select($tabla, $condicion, $valor){
         $mysqli = self::abrirDB();
@@ -153,7 +171,7 @@ class MYSQL{
     public static function insert($tabla, $array){
         $mysqli = self::abrirDB();
             
-        if(!$array['ID']){
+        if(!$array['id']){
             $array = array_filter($array, function($value) { return $value !== null; });
 
             $campos = implode(', ', array_keys($array));
@@ -176,18 +194,18 @@ class MYSQL{
         }
 
         $valores = implode(', ', $valores);
-        if (!$mysqli->query("UPDATE $tabla SET $valores WHERE ID = {$array['ID']}")){
+        if (!$mysqli->query("UPDATE $tabla SET $valores WHERE id = {$array['id']}")){
             echo "2 Falló la actualización MySQL: " . $mysqli->error;
             exit;
         }
 
-        return $array['ID'];
+        return $array['id'];
     }
 
     public static function delete($tabla, $id){
         $mysqli = self::abrirDB();
          
-        if (!$mysqli->query("DELETE FROM $tabla WHERE ID = $id")){
+        if (!$mysqli->query("DELETE FROM $tabla WHERE id = $id")){
             echo "3 Falló la actualización MySQL: " . $mysqli->error;
             exit;
         }

@@ -49,7 +49,7 @@ function crearLink(id,element,text,id_document,id_garage) {
     elementNode.id = id;
     elementNode.type = "button";
     elementNode.className = 'btn btn-primary w-50 mx-auto';
-    elementNode.setAttribute('href', "mapa.php?seccion=comentarios&id="+id_garage );
+    elementNode.setAttribute('href', "mapa?seccion=comentarios&id="+id_garage );
     var textNode = document.createTextNode(text);
 
     var div = document.getElementById(id_document);

@@ -9,71 +9,74 @@ if(isset($_GET['pagina'])){
 if(isset($_SESSION["IDP"])){
     $idGarage = $_SESSION["IDP"];
     $reservaciones = Reservacion::traerTodoPorID($_SESSION["IDP"]);
-    $reservaciones_Limit = Reservacion::traerPorLimit($_SESSION["IDP"],$iniciar, 6);
-    print_r($reservaciones_Limit);
+    $reservaciones_Limit = Reservacion::traerPorLimit($_SESSION["IDP"],$iniciar, 6);    
 }
 
-foreach($reservaciones as $reserva){
+/*foreach($reservaciones as $reserva){
     $fecha_actual = strtotime(date("d-m-Y H:i:00",time()));
     $fecha_entrada = strtotime($reserva->getFecha_inicio());
     if($reserva->getID_Garage() == $idGarage){
         if($fecha_actual <= $fecha_entrada){
-            $id = Reservacion::actualizarReserva(array("ID" => $reserva->getID(), "Estado" => "Cancelado"));
+            $id = Reservacion::actualizarReserva(array("id" => $reserva->getId(), "Estado" => "Cancelado"));
         }
     }
 }
-
+*/
 ?>
-<table class="table">
+<div class="tablon">
 
-    <thead >
-        <tr>
-            <th scope="col">N°</th>
-            <th scope="col">Conductor</th>
-            <th scope="col">Vehiculo</th>
-            <th scope="col">Precio</th>
-            <th scope="col">Horario</th>
-            <th score="col">Cantidad</th>
-            <th score="col">Fecha de inicio</th>
-            <th score="col">Fecha de final</th>
-            <th scope="col">Estado</th>
-            <th scope="col"></th>
-            <th scope="col"></th>
+    <table class="table">
 
-        </tr>
-    </thead>
-    <tbody>
-        <tr></tr>
-    <?php
-        $c = 1;
-        foreach($reservaciones_Limit as $reserva){
+        <thead >
+            <tr>
+                <th scope="col">N°</th>
+                <th scope="col">Conductor</th>
+                <th scope="col">Vehiculo</th>
+                <th scope="col">Precio</th>
+                <th scope="col">Horario</th>
+                <th score="col">Cantidad</th>
+                <th score="col">Fecha de inicio</th>
+                <th score="col">Fecha de final</th>
+                <th scope="col">Estado</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
 
-            $conductores = Conductor::traerPorId($reserva->getID_Conductor());
-    ?>
-        <tr>
-            <th><?= $reserva->getID() ?></th>        
-            <td><?= $conductores->getNombre()?></td>
-            <td><?= $conductores->getTipoVehiculo()?></td>
-            <td><?= $reserva->getPrecio()?></td>
-            <td><?= $reserva->getEstadia()?></td>
-            <td><?= $reserva->getCantidad()?></td>
-            <td><?= $reserva->getFecha_inicio()?></td>        
-            <td><?= $reserva->getFecha_final()?></td>
-            <td><?= $reserva->getEstado()?></td>            
-            <form  action="definirReserva.php" method="post">
-                <input type="hidden" name="idReserva" value="<?= $reserva->getID() ?>">
-                <td><button class="btn btn-primary" name="confirmarForm" type="submit">Confirmar</button></td>
-                <td><button class="btn btn-danger" name="denegarForm" type="submit">Denegar</button></td>                
-            </form>
+            </tr>
+        </thead>
+        <tbody>
+            <tr></tr>
+        <?php
+            $c = 1;
+            foreach($reservaciones_Limit as $reserva){
 
-        </tr>
+                $conductores = Conductor::traerPorId($reserva->getId_Conductor());
+        ?>
+            <tr>
+                <th><?= $reserva->getId() ?></th>        
+                <td><?= $conductores->getNombre()?></td>
+                <td><?= $conductores->getTipo_Vehiculo()?></td>
+                <td><?= $reserva->getPrecio()?></td>
+                <td><?= $reserva->getEstadia()?></td>
+                <td><?= $reserva->getCantidad()?></td>
+                <td><?= $reserva->getFecha_inicio()?></td>        
+                <td><?= $reserva->getFecha_final()?></td>
+                <td><?= $reserva->getEstado()?></td>            
+                <form  action="definirReserva.php" method="post">
+                    <input type="hidden" name="idReserva" value="<?= $reserva->getId() ?>">
+                    <td><button class="btn btn-primary" name="confirmarForm" type="submit">Confirmar</button></td>
+                    <td><button class="btn btn-danger" name="denegarForm" type="submit">Denegar</button></td>                
+                </form>
 
-    <?php
-        }
-    ?>    
-    </tbody>
+            </tr>
 
-</table>
+        <?php
+            }
+        ?>    
+        </tbody>
+
+    </table>
+</div>
+
 
 <nav class="d-flex justify-content-center" aria-label="Page navigation example">
   <ul class="pagination">

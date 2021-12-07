@@ -1,24 +1,24 @@
 <?php 
 class Conductor{
-    private $ID;
+    private $id;
     private $nombre;
     private $contrasena;
     private $email;
-    private $tipoVehiculo;
+    private $tipo_vehiculo;
     private $propietario;
     
     
-    function __construct($nombre,$passwordPlano,$email,$tipoVehiculo,$propietario) {
+    function __construct($nombre,$passwordPlano,$email,$tipo_vehiculo,$propietario) {
         $this->nombre = $nombre;
         $this->contrasena = password_hash($passwordPlano, PASSWORD_DEFAULT);
         $this->email= $email;
-        $this->tipoVehiculo = $tipoVehiculo;
+        $this->tipo_vehiculo = $tipo_vehiculo;
         $this->propietario = $propietario;
     }
             
 
-    public function getID() {
-        return $this->ID;
+    public function getId() {
+        return $this->id;
     }
 
     public function getNombre(){
@@ -28,13 +28,17 @@ class Conductor{
     public function getPassword() {
         return $this->contrasena;
     }
+
+    public function setPassword($contrasena){
+        $this->contrasena = $contrasena;
+    }
     
     public function getEmail() {
         return $this->email;
     }
     
-    public function getTipoVehiculo(){
-        return $this->tipoVehiculo;
+    public function getTipo_Vehiculo(){
+        return $this->tipo_vehiculo;
     }
 
     public function getPropietario(){
@@ -43,24 +47,24 @@ class Conductor{
     
     public function toArray() {
         return [
-            'ID' => $this->ID,
-            'Nombre' => $this->nombre,
-            'Contrasena' => $this->contrasena,
-            'Email' => $this->email,
-            'TipoVehiculo' => $this->tipoVehiculo,
-            'Propietario' => $this->propietario
+            'id' => $this->id,
+            'nombre' => $this->nombre,
+            'contrasena' => $this->contrasena,
+            'email' => $this->email,
+            'tipo_vehiculo' => $this->tipo_vehiculo,
+            'propietario' => $this->propietario
         ];
     }
     
     public static function fromArray($array) {
-        $conductor = new Conductor($array["Nombre"],null,$array["Email"],$array['TipoVehiculo'], $array['Propietario']);
+        $conductor = new Conductor($array["nombre"],null,$array["email"],$array['tipo_vehiculo'], $array['propietario']);
         
-        $conductor->ID = $array['ID'];
-        $conductor->nombre = $array['Nombre'];
-        $conductor->contrasena = $array['Contrasena'];
-        $conductor->email = $array['Email'];
-        $conductor->tipoVehiculo = $array['TipoVehiculo'];
-        $conductor->propietario = $array['Propietario'];
+        $conductor->id = $array['id'];
+        $conductor->nombre = $array['nombre'];
+        $conductor->contrasena = $array['contrasena'];
+        $conductor->email = $array['email'];
+        $conductor->tipo_vehiculo = $array['tipo_vehiculo'];
+        $conductor->propietario = $array['propietario'];
         
         return $conductor;
     }
@@ -75,8 +79,8 @@ class Conductor{
         return $id;
     }
 
-    public static function traerPorId($ID) {
-        $array = MYSQL::select('conductor', 'ID', $ID);
+    public static function traerPorId($id) {
+        $array = MYSQL::select('conductor', 'id', $id);
         if($array) {
             return Conductor::fromArray($array);
         }
@@ -85,7 +89,7 @@ class Conductor{
     }
     
     public static function traerPorEmail($email) {
-        $array = MYSQL::select('conductor', 'Email', $email);
+        $array = MYSQL::select('conductor', 'email', $email);
         if($array) {
             return Conductor::fromArray($array);
         }

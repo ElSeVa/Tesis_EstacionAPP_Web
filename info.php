@@ -1,10 +1,10 @@
 <?php
     foreach($garages as $garage){
-        $estadias = Estadia::traerTodoPorFiltro($garage->getID());
+        $estadias = Estadia::traerTodoPorFiltro($garage->getId());
         foreach($estadias as $estadia){
             if(isset($filtroVehiculo) && $estadia->getVehiculoPermitido() == $filtroVehiculo->getVehiculoPermitido()){
 ?>
-<div id="info-extra-<?=$garage->getID()?>" class="d-flex mt-3 flex-column">
+<div id="info-extra-<?=$garage->getId()?>" class="d-flex mt-3 flex-column">
     <span class="lead"><strong><?= $garage->getNombre() ?></strong></span>
     <span class="lead mx-2"><?= $garage->getDireccion() ?>, <?= $garage->getDisponibilidad()?></span>
     <span class="lead"><?= $garage->getTelefono()?></span>
@@ -15,7 +15,7 @@
         
 <?php
                 foreach($estadias as $estadia){
-                    if($estadia->getID_Garage() == $garage->getID()){
+                    if($estadia->getId_Garage() == $garage->getId()){
 ?>
             <div class="p-1 bd-highlight"><span class="lead"><?= $estadia->getVehiculoPermitido() ?></span></div>
 <?php
@@ -31,7 +31,7 @@
             $filtros = Estadia::filtrar($filtroHorario, $vehiculoFiltro, $filtroPrecio);
             if (is_array($filtros) || is_object($filtros)){
                 foreach($filtros as $f){
-                    if($garage->getID() == $f->getID_Garage()){
+                    if($garage->getId() == $f->getId_Garage()){
 ?>
             <span class="py-1 lead"><strong>Precio de <?= $f->getHorario()?>:</strong></span>            
             <span class="py-1 lead">$<?= $f->getPrecio() ?></span>

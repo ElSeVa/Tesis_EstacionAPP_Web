@@ -2,18 +2,18 @@
 
 class Estadia{
 
-    private $ID;
+    private $id;
     private $precio;
     private $horario;
     private $vehiculoPermitido;
-    private $ID_Garage;
+    private $id_garage;
 
-    function getID(){
-        return $this->ID;
+    function getId(){
+        return $this->id;
     }
 
-    function setID($ID){
-        $this->ID = $ID;
+    function setId($id){
+        $this->id = $id;
     }
 
     function getPrecio(){
@@ -28,32 +28,32 @@ class Estadia{
         return $this->vehiculoPermitido;
     }
 
-    function getID_Garage(){
-        return $this->ID_Garage;
+    function getId_Garage(){
+        return $this->id_garage;
     }
 
-    function __construct($precio, $horario, $vehiculoPermitido, $ID_Garage){
+    function __construct($precio, $horario, $vehiculoPermitido, $id_garage){
         $this->precio = $precio;
         $this->horario = $horario;
         $this->vehiculoPermitido = $vehiculoPermitido;
-        $this->ID_Garage = $ID_Garage;
+        $this->id_garage = $id_garage;
     }
 
     public function toArray() {
         return [
-            'ID' => $this->ID,
-            'Precio' => $this->precio,
-            'Horario' => $this->horario,
-            'VehiculoPermitido' => $this->vehiculoPermitido,
-            'ID_Garage' => $this->ID_Garage
+            'id' => $this->id,
+            'precio' => $this->precio,
+            'horario' => $this->horario,
+            'vehiculo_permitido' => $this->vehiculoPermitido,
+            'id_garage' => $this->id_garage
         ];
     }
 
     public static function fromArray($array) {
-        $garage = Garage::traerPorId($array['ID_Garage']);
-        $registro = new Estadia($array["Precio"], $array["Horario"], $array['VehiculoPermitido'], $garage->getID());
+        $garage = Garage::traerPorId($array['id_garage']);
+        $registro = new Estadia($array["precio"], $array["horario"], $array['vehiculo_permitido'], $garage->getId());
 
-        $registro->ID = intval($array['ID']);
+        $registro->id = intval($array['id']);
 
         return $registro;
     }
@@ -68,13 +68,13 @@ class Estadia{
         return $id;
     }
 
-    public static function eliminarEstadia($ID){
-        $boolean = MYSQL::delete('estadia', $ID);
+    public static function eliminarEstadia($id){
+        $boolean = MYSQL::delete('estadia', $id);
         return $boolean;
     }
 
-    public static function traerPorId($ID) {
-        $array = MYSQL::select('estadia', 'ID', $ID);
+    public static function traerPorId($id) {
+        $array = MYSQL::select('estadia', 'id', $id);
         if($array) {
             return Estadia::fromArray($array);
         }
@@ -82,8 +82,8 @@ class Estadia{
         return null;
     }
 
-    public static function traerPorIdGarage($ID) {
-        $array = MYSQL::select('estadia', 'ID_Garage', $ID);
+    public static function traerPorIdGarage($id) {
+        $array = MYSQL::select('estadia', 'id_garage', $id);
         if($array) {
             return Estadia::fromArray($array);
         }
@@ -91,8 +91,8 @@ class Estadia{
         return null;
     }
 
-    public static function traerTodoPorIdGarage($ID) {
-        $registros = MYSQL::selectALLWhere('estadia', 'ID_Garage', $ID);
+    public static function traerTodoPorIdGarage($id) {
+        $registros = MYSQL::selectALLWhere('estadia', 'id_garage', $id);
 
         $array = array();
         foreach($registros as $registro) {
@@ -124,8 +124,8 @@ class Estadia{
         return $array;
     }
 
-    public static function traerTodoPorFiltro($ID) {
-        $registros = MYSQL::selectALLFilterWhere('estadia', "ID_Garage", $ID, 'VehiculoPermitido');
+    public static function traerTodoPorFiltro($id) {
+        $registros = MYSQL::selectALLFilterWhere('estadia', "id_garage", $id, 'vehiculo_permitido');
 
         $array = array();
         foreach($registros as $registro) {
@@ -136,7 +136,7 @@ class Estadia{
     }
 
     public static function filtroPorVehiculo($vehiculo) {
-        $array = MYSQL::select('estadia', 'VehiculoPermitido', $vehiculo);
+        $array = MYSQL::select('estadia', 'vehiculo_permitido', $vehiculo);
         if($array) {
             return Estadia::fromArray($array);
         }

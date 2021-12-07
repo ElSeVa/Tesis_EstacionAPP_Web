@@ -1,13 +1,13 @@
 <?php
 
 class Mapa{
-    private $ID;
+    private $id;
     private $latitud;
     private $longitud;
-    private $ID_Garage;
+    private $id_garage;
 
-    function getID(){
-        return $this->ID;
+    function getId(){
+        return $this->id;
     }
 
     function getLatitud(){
@@ -18,22 +18,22 @@ class Mapa{
         return $this->longitud;
     }
 
-    function getID_Garage(){
-        return $this->ID_Garage;
+    function getId_Garage(){
+        return $this->id_garage;
     }
 
-    function __construct($latitud, $longitud, $ID_Garage){
+    function __construct($latitud, $longitud, $id_garage){
         $this->latitud = $latitud;
         $this->longitud = $longitud;
-        $this->ID_Garage = $ID_Garage;
+        $this->id_garage = $id_garage;
     }
 
     public function toArray() {
         return [
-            'ID' => $this->ID,                
+            'id' => $this->id,                
             'latitud' => $this->latitud,
             'longitud' => $this->longitud,
-            'ID_Garage' => $this->ID_Garage
+            'id_garage' => $this->id_garage
         ];
     }
 
@@ -47,15 +47,15 @@ class Mapa{
         return $id;
     }
 
-    public static function eliminarMapa($ID){
-        $boolean = MYSQL::delete('mapa', $ID);
+    public static function eliminarMapa($id){
+        $boolean = MYSQL::delete('mapa', $id);
         return $boolean;
     }
 
     public static function fromArray($array) {
-        $mapa= new Mapa($array['latitud'], $array['longitud'], $array['ID_Garage']);        
+        $mapa= new Mapa($array['latitud'], $array['longitud'], $array['id_garage']);        
 
-        $mapa->ID = intval($array['ID']);
+        $mapa->id = intval($array['id']);
         
         return $mapa;
     }
@@ -72,8 +72,8 @@ class Mapa{
     }
 
     
-    public static function traerPorIDGarage($ID) {
-        $array = MYSQL::select('mapa', 'ID_Garage', $ID);
+    public static function traerPorIDGarage($id) {
+        $array = MYSQL::select('mapa', 'id_garage', $id);
         if($array) {
             return Mapa::fromArray($array);
         }

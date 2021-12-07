@@ -6,10 +6,119 @@
   display: none;
 }
 
+#requisitos span{
+  color: red;
+}
+
+#btnGoogleLogin:hover{
+  background-color: #2196F3;
+  transition: .7s;
+}
+
+#btnGoogleRegister:hover{
+  background-color: #2196F3;
+  transition: .7s;
+}
+
+.icon-filter{
+  width: 20px;  
+}
+
+
+.line-separator {
+  background-color: #ccc;
+  flex-grow: 5;
+  height: 1px
+}
+
+.or-container {
+  align-items: center;
+  color: #ccc;
+  display: flex;
+  margin: 25px 0
+}
+
+.or-label {
+  flex-grow: 1;
+  margin: 0 15px;
+  text-align: center
+}
+
+.circle{
+  border-radius: 50%;
+  width: 50%;
+}
+
 #map { 
   height: 500px; 
   z-index: 0;
+}
 
+#imagenes{
+  width: 18rem;
+  padding: 1rem;
+}
+
+
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
 }
 /* The side navigation menu */
 
@@ -123,7 +232,6 @@ p.comentario input:checked ~ label {
 /*
   * Dummy devices (replace them with your own or something else entirely!)
   */
-
 .product-device {
   position: absolute;
   right: 10%;
@@ -132,17 +240,26 @@ p.comentario input:checked ~ label {
   height: 540px;
   background-color: #333;
   border-radius: 21px;
+  overflow: hidden;
   transform: rotate(30deg);
 }
 
-.product-device::before {
+.product-device img{
   position: absolute;
-  top: 10%;
+  top: 5%;
   right: 10px;
   bottom: 10%;
   left: 10px;
-  content: "";
-  background-color: rgba(255, 255, 255, .1);
+  width: 93%;
+  border-radius: 5px;
+}
+
+.product-device-2 img{
+  position: absolute;
+  right: 10px;  
+  left: 10px;
+  top: -10%;
+  width: 93%;
   border-radius: 5px;
 }
 
@@ -151,7 +268,21 @@ p.comentario input:checked ~ label {
   right: auto;
   bottom: 0;
   left: 5%;
-  background-color: #e5e5e5;
+  overflow: hidden;
+  background-color: #b6b6b6;
+}
+
+.product-device-3{
+  width: 80%; 
+  height: 400px; 
+  overflow: hidden;
+  border-radius: 21px 21px 0 0;
+}
+
+.product-device-3 img {
+  position: relative;
+  top: 10%;
+  width: 90%;
 }
 
 .form-signin {
@@ -193,15 +324,33 @@ p.comentario input:checked ~ label {
 .flex-equal > * {
   flex: 1;
 }
+
 @media (min-width: 768px) {
   .flex-md-equal > * {
     flex: 1;
   }
 }
 
+@media (max-width: 768px) {
+  .flex-md-equal > * {
+    flex: 1;
+  }
+  .tablon {
+    overflow:scroll;
+  }
+}
+
+@media (max-width: 990px) {
+  .product-device{
+    visibility: hidden;
+  }
+}
   
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
 @media screen and (max-height: 450px) {
   .sidenav {padding-top: 15px;}
   .sidenav a {font-size: 18px;}
+  .tablon {
+    overflow:scroll;
+  }
 }

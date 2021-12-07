@@ -11,14 +11,14 @@ $estadias = Estadia::traerTodoPorIdGarage($idGarage);
 if($precio && $horario && $vehiculoPermitido){
     foreach($estadias as $estadia){
         if($estadia->getVehiculoPermitido() == $vehiculoPermitido && $estadia->getHorario() == $horario){
-           header("location:panel.php?seccion=modificar&accion=ErrorVehiculoRepetido");
+           header("location:panel?seccion=modificar&accion=ErrorVehiculoRepetido");
            die;
         }
     }
     $id = Estadia::insertarEstadia($arrayEstadia->toArray());
-    header("location:panel.php?seccion=modificar&accion=enviado");
+    header("location:panel?seccion=modificar&accion=enviado");
 }else{
-    header("location:panel.php?seccion=modificar&accion=completar");
+    header("location:panel?seccion=modificar&accion=completar");
 }
 
 

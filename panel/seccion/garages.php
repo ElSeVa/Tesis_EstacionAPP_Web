@@ -20,14 +20,14 @@ if(isset($_GET["accion"])){
     <div class="carousel-inner">
     <?php
     foreach($imagenes as $img){
-        if($img->getTipo() == "Principal" && $img->getID_Garage() == $idGarage){
+        if($img->getTipo() == "Principal" && $img->getId_Garage() == $idGarage){
             ?>
         <div class="carousel-item active">
             <img class="img-fluid rounded-circle" src="data:image/jpeg;base64,<?= $img->getImagen() ?>" alt="">
         </div>
         <?php
         }
-        if($img->getTipo() == "Secundario" && $img->getID_Garage() == $idGarage){
+        if($img->getTipo() == "Secundario" && $img->getId_Garage() == $idGarage){
             ?>
         <div class="carousel-item">
             <img class="img-fluid rounded-circle" src="data:image/jpeg;base64,<?= $img->getImagen() ?>" alt="">
@@ -52,6 +52,6 @@ if(isset($_GET["accion"])){
     <h4><?= $direccion ?></h4>
     <p><?= $disponibilidad ?></p>
     <p><?= $telefono ?></p>
-    <a class="btn btn-primary" href="panel.php?seccion=garage&accion=editar">Editar Garage</a>
-    <a class="btn btn-danger" href="panel.php?seccion=garage&accion=eliminar">Eliminar Garage</a>
+    <a class="btn btn-primary" href="panel?seccion=garage&accion=editar">Editar Garage</a>
+    <a class="btn btn-danger" href="panel?seccion=garage&accion=eliminar">Eliminar Garage</a>
 </div>

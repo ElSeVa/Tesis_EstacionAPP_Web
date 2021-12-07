@@ -1,26 +1,26 @@
 <?php
 class Garage{
-    private $ID;
+    private $id;
     private $nombre;
     private $direccion;
     private $disponibilidad;
     private $telefono;
-    private $ID_Conductor;
+    private $id_conductor;
 
-    function __construct($nombre,$direccion,$disponibilidad,$telefono,$ID_Conductor) {
+    function __construct($nombre,$direccion,$disponibilidad,$telefono,$id_conductor) {
         $this->nombre = $nombre;
         $this->direccion = $direccion;
         $this->disponibilidad = $disponibilidad;
         $this->telefono = $telefono;
-        $this->ID_Conductor = $ID_Conductor;
+        $this->id_conductor = $id_conductor;
     }
 
-    function getID(){ 
-        return $this->ID; 
+    function getId(){ 
+        return $this->id; 
     }
 
-    function getID_Conductor(){ 
-        return $this->ID_Conductor; 
+    function getId_Conductor(){ 
+        return $this->id_conductor; 
     }
 
     function getNombre(){ 
@@ -41,24 +41,24 @@ class Garage{
 
     public function toArray() {
         return [
-            'ID' => $this->ID,
-            'Nombre' => $this->nombre,
-            'Direccion' => $this->direccion,
-            'Disponibilidad' => $this->disponibilidad,
-            'Telefono' => $this->telefono,
-            'ID_Conductor' => $this->ID_Conductor
+            'id' => $this->id,
+            'nombre' => $this->nombre,
+            'direccion' => $this->direccion,
+            'disponibilidad' => $this->disponibilidad,
+            'telefono' => $this->telefono,
+            'id_conductor' => $this->id_conductor
         ];
     }
 
     public static function fromArray($array) {
-        $garage= new Garage($array["Nombre"],$array["Direccion"],$array["Disponibilidad"],$array['Telefono'], $array['ID_Conductor']);
+        $garage= new Garage($array["nombre"],$array["direccion"],$array["disponibilidad"],$array['telefono'], $array['id_conductor']);
         
-        $garage->ID = $array['ID'];
-        $garage->nombre = $array['Nombre'];
-        $garage->direccion = $array['Direccion'];
-        $garage->disponibilidad = $array['Disponibilidad'];
-        $garage->telefono = $array['Telefono'];
-        $garage->ID_Conductor = $array['ID_Conductor'];
+        $garage->id = $array['id'];
+        $garage->nombre = $array['nombre'];
+        $garage->direccion = $array['direccion'];
+        $garage->disponibilidad = $array['disponibilidad'];
+        $garage->telefono = $array['telefono'];
+        $garage->id_conductor = $array['id_conductor'];
         
         return $garage;
     }
@@ -68,8 +68,8 @@ class Garage{
         return $id;
     }
 
-    public static function eliminarGarage($ID){
-        $boolean = MYSQL::delete('garage', $ID);
+    public static function eliminarGarage($id){
+        $boolean = MYSQL::delete('garage', $id);
         return $boolean;
     }
 
@@ -84,8 +84,8 @@ class Garage{
         return $array;
     }
 
-    public static function traerPorId($ID) {
-        $array = MYSQL::select('garage', 'ID', $ID);
+    public static function traerPorId($id) {
+        $array = MYSQL::select('garage', 'id', $id);
         if($array) {
             return Garage::fromArray($array);
         }
@@ -93,8 +93,8 @@ class Garage{
         return null;
     }
 
-    public static function traerPorIDC($ID) {
-        $array = MYSQL::select('garage', 'ID_Conductor', $ID);
+    public static function traerPorIDC($id) {
+        $array = MYSQL::select('garage', 'id_conductor', $id);
         if($array) {
             return Garage::fromArray($array);
         }

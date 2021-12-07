@@ -3,7 +3,7 @@ var inputLat = document.getElementById("lat");
 var inputLng = document.getElementById("lng");
 
 $(function(){
-    $("#inputDireccion").change(function(){
+    $("#inputDireccion").on("keyup", function(){
         L.esri.Geocoding.geocode().address(input.value).city("Buenos Aires").country("Argentina").run(function (err, results, response) {
         if (err) {
           console.log(err);
